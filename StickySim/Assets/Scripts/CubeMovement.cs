@@ -9,6 +9,7 @@ public class CubeMovement : MonoBehaviour
     bool TileOrder = true;
     int level = 0;
     bool reset = false;
+    float speed1 = 5, speed2 = -5;
     public GameObject FollowCam;
     void Start()
     {
@@ -36,13 +37,13 @@ public class CubeMovement : MonoBehaviour
         if (TileOrder == true && this.gameObject.CompareTag("Left") && transform.position.x >= -10 /* && !isStopped*/)
         {
             Debug.Log("l");
-            transform.position += new Vector3(5, 0, 0) * Time.deltaTime;
+            transform.position += new Vector3(speed1, 0, 0) * Time.deltaTime;
         } 
 
         if (TileOrder == false && this.gameObject.CompareTag("Right") && transform.position.z <= 10 /* && !isStopped*/)
         {
             Debug.Log("r");
-            transform.position += new Vector3(0, 0, -5) * Time.deltaTime;
+            transform.position += new Vector3(0, 0, speed2) * Time.deltaTime;
         }
     }
 
@@ -73,6 +74,7 @@ public class CubeMovement : MonoBehaviour
             this.transform.position = new Vector3(0, level, 10);
             FollowCam.transform.position = new Vector3(0, level, 0);
         }
-
+        speed1 *= 1.025f;
+        speed2 *= 1.025f;
     }
 }
