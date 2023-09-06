@@ -6,35 +6,73 @@ public class CubeMovement : MonoBehaviour
 {
 
     bool isStopped = false;
+    bool TileOrder = true;
+    int level = 0;
+    bool reset = false;
+    public GameObject FollowCam;
     void Start()
     {
         Debug.Log("Start");
         isStopped = false;
+        if (this.CompareTag("Left")) 
+        {
+            transform.position = new Vector3(-10, 0);
+        }
+        if (this.CompareTag("Right"))
+        {
+            transform.position = new Vector3(0, 0, 10);
+        }
+
     }
 
     void Update()
     {
-        tileMovement();
+        TileMovement();
+        TileStop();
     }
-     private void tileMovement()
+
+     private void TileMovement()
     {
-        if (this.gameObject.CompareTag("Left") && transform.position.x >= -5 && !isStopped)
+        if (TileOrder == true && this.gameObject.CompareTag("Left") && transform.position.x >= -10 /* && !isStopped*/)
         {
-            transform.position += new Vector3(3, 0, 0) * Time.deltaTime;
-            // Debug.Log(transform.position.x);
-        }
+            Debug.Log("l");
+            transform.position += new Vector3(5, 0, 0) * Time.deltaTime;
+        } 
 
-        if (this.gameObject.CompareTag("Right") && transform.position.z <= 5 && !isStopped)
+        if (TileOrder == false && this.gameObject.CompareTag("Right") && transform.position.z <= 10 /* && !isStopped*/)
         {
-            transform.position += new Vector3(0, 0, -3) * Time.deltaTime;
-             Debug.Log(transform.position.z);
+            Debug.Log("r");
+            transform.position += new Vector3(0, 0, -5) * Time.deltaTime;
         }
+    }
 
-        if (Input.GetKey(KeyCode.Space))
+    private void TileStop()
+    {
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            // transform.position = this.transform.position;
+            Debug.Log(TileOrder);
             isStopped = true;
-            // Debug.Log("Stop");
+            TileOrder = !TileOrder;
+            reset = true;
+            level++;
+            tileReset();    
         }
+    }
+
+    private void tileReset()
+    {
+        if (this.gameObject.CompareTag("Left"))
+        {
+            this.transform.position = new Vector3(-10, level);
+            FollowCam.transform.position = new Vector3(0, level, 0);
+        }
+
+        if (this.gameObject.CompareTag("Right"))
+        {
+            this.transform.position = new Vector3(0, level, 10);
+            FollowCam.transform.position = new Vector3(0, level, 0);
+        }
+
     }
 }
