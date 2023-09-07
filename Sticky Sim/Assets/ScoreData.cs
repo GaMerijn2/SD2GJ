@@ -7,6 +7,7 @@ public class ScoreData : MonoBehaviour
 {
     public TextMeshProUGUI ScoreDisplay;
     private CubeMovement lvl;
+    float score;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +19,7 @@ public class ScoreData : MonoBehaviour
     {
         
         Debug.Log(lvl.level);
-        ScoreDisplay.text = lvl.level.ToString();
+        score = lvl.level * 2;
+        ScoreDisplay.text = score.ToString();
     }
 }
