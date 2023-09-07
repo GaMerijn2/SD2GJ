@@ -5,6 +5,9 @@ using static Cinemachine.DocumentationSortingAttribute;
 
 public class CubeMovement : MonoBehaviour
 {
+    public static CubeMovement LastTile { get; private set; }
+    [SerializeField]
+
 
     bool isStopped = false;
     bool TileOrder = true;
@@ -16,7 +19,10 @@ public class CubeMovement : MonoBehaviour
     private Vector3 LeftStartpos;
     private Vector3 RightStartpos;
     int side;
+    public ParticleSystem Particle;
+    public AudioSource Pling;
 
+    
 
 
     void Start()
@@ -57,6 +63,9 @@ public class CubeMovement : MonoBehaviour
             reset = true;
             level += (0.5f);
             tileReset();
+            Particle.Play();
+            Pling.Play();
+
         }
     }
 
@@ -75,8 +84,8 @@ public class CubeMovement : MonoBehaviour
                 side = 0;
                 break;
         }
-        speed1 *= 1.025f;
-        speed2 *= 1.025f;
+        speed1 *= 1.035f;
+        speed2 *= 1.035f;
     }
 
 
