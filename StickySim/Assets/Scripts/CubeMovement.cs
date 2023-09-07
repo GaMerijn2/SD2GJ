@@ -1,49 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class CubeMovement : MonoBehaviour
 {
 
     bool isStopped = false;
     bool TileOrder = true;
-    int level = 0;
+    float level = 0;
     bool reset = false;
     float speed1 = 5, speed2 = -5;
     public GameObject FollowCam;
+    public GameObject decoyTile;
+    private Vector3 LeftStartpos;
+    private Vector3 RightStartpos;
+    int side;
+
+
+
     void Start()
     {
+        side = 0;
         Debug.Log("Start");
         isStopped = false;
-        if (this.CompareTag("Left")) 
-        {
-            transform.position = new Vector3(-10, 0);
-        }
-        if (this.CompareTag("Right"))
-        {
-            transform.position = new Vector3(0, 0, 10);
-        }
-
+        transform.localScale = new Vector3(5, 0.5f, 5);
     }
 
     void Update()
     {
         TileMovement();
         TileStop();
+        CameraMovement();
     }
 
      private void TileMovement()
     {
-        if (TileOrder == true && this.gameObject.CompareTag("Left") && transform.position.x >= -10 /* && !isStopped*/)
+        switch (side)
         {
-            Debug.Log("l");
-            transform.position += new Vector3(speed1, 0, 0) * Time.deltaTime;
-        } 
-
-        if (TileOrder == false && this.gameObject.CompareTag("Right") && transform.position.z <= 10 /* && !isStopped*/)
-        {
-            Debug.Log("r");
-            transform.position += new Vector3(0, 0, speed2) * Time.deltaTime;
+            case 1:
+                transform.position += new Vector3(speed1, 0, 0) * Time.deltaTime;
+                break;
+            case 0:
+                transform.position += new Vector3(0, 0, speed2) * Time.deltaTime;
+                break;
         }
     }
 
@@ -52,29 +52,42 @@ public class CubeMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log(TileOrder);
-            isStopped = true;
+            placeTile();
             TileOrder = !TileOrder;
             reset = true;
-            level++;
-            tileReset();    
+            level += (0.5f);
+            tileReset();
         }
     }
 
     private void tileReset()
     {
-        if (this.gameObject.CompareTag("Left"))
+        
+        switch (side)
         {
-            this.transform.position = new Vector3(-10, level);
-            FollowCam.transform.position = new Vector3(0, level, 0);
-        }
+            case 0:
+                this.transform.position = new Vector3(-10, level, 0);
+                side = 1;
 
-        if (this.gameObject.CompareTag("Right"))
-        {
-            this.transform.position = new Vector3(0, level, 10);
-            FollowCam.transform.position = new Vector3(0, level, 0);
+                break;
+            case 1:
+                this.transform.position = new Vector3(0, level, 10);
+                side = 0;
+                break;
         }
         speed1 *= 1.025f;
         speed2 *= 1.025f;
+    }
+
+
+    void placeTile()
+    {
+        var tileClone = Instantiate(decoyTile);
+        tileClone.transform.position = new Vector3(transform.position.x, level, transform.position.z);
+    }
+
+    void CameraMovement()
+    {
+        FollowCam.transform.position = Vector3.Lerp(FollowCam.transform.position, new Vector3(0, level, 0), Time.deltaTime * 1f);
     }
 }
