@@ -5,16 +5,15 @@ using UnityEngine;
 public class CubeMovement : MonoBehaviour
 {
 
-    bool isStopped = false;
     bool TileOrder = true;
     int level = 0;
     bool reset = false;
     float speed1 = 5, speed2 = -5;
     public GameObject FollowCam;
+    public AudioSource Pling;
     void Start()
     {
         Debug.Log("Start");
-        isStopped = false;
         if (this.CompareTag("Left")) 
         {
             transform.position = new Vector3(-10, 0);
@@ -34,13 +33,13 @@ public class CubeMovement : MonoBehaviour
 
      private void TileMovement()
     {
-        if (TileOrder == true && this.gameObject.CompareTag("Left") && transform.position.x >= -10 /* && !isStopped*/)
+        if (TileOrder == true && this.gameObject.CompareTag("Left") && transform.position.x >= -10)
         {
             Debug.Log("l");
             transform.position += new Vector3(speed1, 0, 0) * Time.deltaTime;
         } 
 
-        if (TileOrder == false && this.gameObject.CompareTag("Right") && transform.position.z <= 10 /* && !isStopped*/)
+        if (TileOrder == false && this.gameObject.CompareTag("Right") && transform.position.z <= 10)
         {
             Debug.Log("r");
             transform.position += new Vector3(0, 0, speed2) * Time.deltaTime;
@@ -53,8 +52,8 @@ public class CubeMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log(TileOrder);
-            isStopped = true;
             TileOrder = !TileOrder;
+            Pling.Play();
             reset = true;
             level++;
             tileReset();    
