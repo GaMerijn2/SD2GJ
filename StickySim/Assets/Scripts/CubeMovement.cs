@@ -11,10 +11,12 @@ public class CubeMovement : MonoBehaviour
     float speed1 = 5, speed2 = -5;
     public GameObject FollowCam;
     public AudioSource Pling;
+    float camLevel;
+
     void Start()
     {
         Debug.Log("Start");
-        if (this.CompareTag("Left")) 
+        if (this.CompareTag("Left"))
         {
             transform.position = new Vector3(-10, 0);
         }
@@ -29,19 +31,25 @@ public class CubeMovement : MonoBehaviour
     {
         TileMovement();
         TileStop();
+        CameraMovement();
     }
 
-     private void TileMovement()
+    void CameraMovement()
+    {
+        FollowCam.transform.position = Vector3.Lerp(FollowCam.transform.position, new Vector3(0, level, 0), Time.deltaTime * 1f);
+    }
+
+    private void TileMovement()
     {
         if (TileOrder == true && this.gameObject.CompareTag("Left") && transform.position.x >= -10)
         {
-            Debug.Log("l");
+           // Debug.Log("l");
             transform.position += new Vector3(speed1, 0, 0) * Time.deltaTime;
         } 
 
         if (TileOrder == false && this.gameObject.CompareTag("Right") && transform.position.z <= 10)
         {
-            Debug.Log("r");
+            //Debug.Log("r");
             transform.position += new Vector3(0, 0, speed2) * Time.deltaTime;
         }
     }
@@ -51,7 +59,7 @@ public class CubeMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log(TileOrder);
+           // Debug.Log(TileOrder);
             TileOrder = !TileOrder;
             Pling.Play();
             reset = true;
@@ -65,15 +73,14 @@ public class CubeMovement : MonoBehaviour
         if (this.gameObject.CompareTag("Left"))
         {
             this.transform.position = new Vector3(-10, level);
-            FollowCam.transform.position = new Vector3(0, level, 0);
         }
 
         if (this.gameObject.CompareTag("Right"))
         {
             this.transform.position = new Vector3(0, level, 10);
-            FollowCam.transform.position = new Vector3(0, level, 0);
         }
         speed1 *= 1.025f;
         speed2 *= 1.025f;
     }
+
 }
