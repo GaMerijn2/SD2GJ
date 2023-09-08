@@ -93,6 +93,7 @@ public class CubeMovement : MonoBehaviour
     {
         var tileClone = Instantiate(decoyTile);
         tileClone.transform.position = new Vector3(transform.position.x, level, transform.position.z);
+
     }
 
     void CameraMovement()
