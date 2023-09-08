@@ -18,7 +18,7 @@ public class ScoreData : MonoBehaviour
     void Update()
     {
         
-        Debug.Log(lvl.level);
+      //  Debug.Log(lvl.level);
         score = lvl.level * 2;
         ScoreDisplay.text = score.ToString();
     }
